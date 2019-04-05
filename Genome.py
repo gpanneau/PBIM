@@ -8,7 +8,7 @@ Created on Fri Apr  5 08:23:06 2019
 import numpy as np
 
 class Genome:
-  def __init__(self,I,O):  #Default Contructor
+  def __init__(self,I=25,O=3):  #Default Contructor
     
     self.O_=O  #range of the Output vector
     
@@ -19,6 +19,18 @@ class Genome:
     self.Hiden_=np.array([])  #Hiden vector
     
     self.Map_=np.zeros((I,O))  #Conection Matrix
+    
+  def Copy_Genom(self,Gen):  #Copy 
+    
+    self.O_=Gen.O_  
+    
+    self.I_=Gen.I_  
+    
+    self.H_=Gen.H_ 
+    
+    self.Hiden_=Gen.Hiden_  
+    
+    self.Map_=Gen.Map_[:,:]  
 
 
   def Set_Map(self,Matrix):  #Matrix Seter by copy
@@ -42,4 +54,9 @@ if __name__ == '__main__':
   gm3=Genome(2,4)
   gm3.Set_Map(np.array([[0,1,0,1],[1,0,1,0]]))
   print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  print(gm3.Processing(np.array([0,1]))==np.array([True,False,True,False]))
+  gm4=Genome(14,12)
+  gm4.Copy_Genom(gm3)
+  print(gm4.Processing(np.array([0,1]))==np.array([True,False,True,False]))
+  print(gm4.Processing(np.array([1,0]))==np.array([False,True,False,True]))
   

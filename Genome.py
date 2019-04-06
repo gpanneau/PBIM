@@ -28,7 +28,7 @@ class Genome:
     
     self.H_=Gen.H_ 
     
-    self.Hiden_=Gen.Hiden_  
+    self.Hiden_=Gen.Hiden_[:]  
     
     self.Map_=Gen.Map_[:,:]  
 
@@ -45,18 +45,34 @@ class Genome:
     self.Hiden_=1*Out[self.O_:self.O_+self.H_]
     return Out[0:self.O_]
 
+  def Add_Gene(self):#This methode create a new gene, an intermediary hiden node between the input and the output. It improve the lenght of Hiden and H by one
+    self.H_+=1
+    self.Hiden_=np.zeros((1,self.H_))
+    M=np.zeros((self.I_+self.H_,self.O_+self.H_))
+    M[0:self.I_+self.H_-1,0:self.O_+self.H_-1]=self.Map_
+    self.Map_=M
 if __name__ == '__main__':
+  print("1: Constructor test")
   gm1=Genome(3,10)
   print(gm1.Map_==np.zeros((3,10)), gm1.O_==10, gm1.I_==3,gm1.H_==0, gm1.Hiden_==np.array([]))
+  print("2: Set_Map test")
   gm2=Genome(2,2)
   gm2.Set_Map(np.array([[1, 2], [3, 4]]))
   print(gm2.Map_==np.array([[1, 2], [3, 4]]))
+  print("3: Processing test")
   gm3=Genome(2,4)
   gm3.Set_Map(np.array([[0,1,0,1],[1,0,1,0]]))
   print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
   print(gm3.Processing(np.array([0,1]))==np.array([True,False,True,False]))
+  print("4: Copy_Genom test")
   gm4=Genome(14,12)
   gm4.Copy_Genom(gm3)
   print(gm4.Processing(np.array([0,1]))==np.array([True,False,True,False]))
   print(gm4.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  print("5: Add_Gene test")
+  gm5=Genome(2,4)
+  gm5.Add_Gene()
+  print(gm5.H_==1,gm5.Hiden_==np.array([0]))
+  
+  
   

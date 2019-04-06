@@ -51,6 +51,11 @@ class Genome:
     M=np.zeros((self.I_+self.H_,self.O_+self.H_))
     M[0:self.I_+self.H_-1,0:self.O_+self.H_-1]=self.Map_
     self.Map_=M
+    
+  def Add_Genes(self, Number_Of_Genes):
+    for i in range(Number_Of_Genes):
+      self.Add_Gene()
+  
 if __name__ == '__main__':
   print("1: Constructor test")
   gm1=Genome(3,10)
@@ -73,6 +78,10 @@ if __name__ == '__main__':
   gm5=Genome(2,4)
   gm5.Add_Gene()
   print(gm5.H_==1,gm5.Hiden_==np.array([0]))
-  
-  
-  
+  print("6: Add_Genes test")
+  gm6=Genome(2,4)
+  gm6.Set_Map(np.array([[0,1,0,1],[1,0,1,0]]))
+  gm6.Add_Genes(3)
+  print(gm6.H_==3,gm5.Hiden_==np.zeros(3),gm6.O_==4,gm6.I_==2)
+  print(gm6.Map_==np.array([[0,1,0,1,0,0,0],[1,0,1,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]))
+   

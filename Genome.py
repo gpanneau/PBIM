@@ -57,11 +57,12 @@ class Genome:
       self.Add_Gene()
       
       
-  def Add_Connection(self,Source,Target,Value): # Add a conection of a chosen value in the Conections Matrix 
+  def Add_Connection(self,Source,Target,Value=1): # Add a conection of a chosen value in the chosen position in the Conections Matrix 
     self.Map_[Source,Target]=Value
     
-  
-    
+  def Add_Random_Connection(self,Value=1):
+    self.Add_Connection(int(np.random.random()*(self.H_+self.I_)),int(np.random.random()*(self.H_+self.O_)),Value) # Add a conection of a chosen value in a random position in the Conections Matrix 
+   
     
 if __name__ == '__main__':
   print("1: Constructor test")
@@ -95,3 +96,14 @@ if __name__ == '__main__':
   gm7=Genome(2,4)
   gm7.Add_Connection(0,3,-8)
   print(gm7.Map_[0,3]==-8)
+  print("8: Add_Random_Connection test")
+  gm8=Genome(1,4)
+  gm8.Add_Random_Connection()
+  for i in range(4):
+    if gm8.Map_[0,i]==1:
+      print(True)
+  gm8.Add_Random_Connection(-2.5)
+  for i in range(4):
+    if gm8.Map_[0,i]==-2.5:
+      print(True)
+    

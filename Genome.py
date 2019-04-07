@@ -45,17 +45,24 @@ class Genome:
     self.Hiden_=1*Out[self.O_:self.O_+self.H_]
     return Out[0:self.O_]
 
-  def Add_Gene(self):#This methode create a new gene, an intermediary hiden node between the input and the output. It improve the lenght of Hiden and H by one
+  def Add_Gene(self):#This methode add a new gene, an intermediary hiden node between the input and the output. It improve the lenght of Hiden and H by one
     self.H_+=1
     self.Hiden_=np.zeros((1,self.H_))
     M=np.zeros((self.I_+self.H_,self.O_+self.H_))
     M[0:self.I_+self.H_-1,0:self.O_+self.H_-1]=self.Map_
     self.Map_=M
     
-  def Add_Genes(self, Number_Of_Genes):
+  def Add_Genes(self, Number_Of_Genes):# add a selected number of genes
     for i in range(Number_Of_Genes):
       self.Add_Gene()
+      
+      
+  def Add_Connection(self,Source,Target,Value): # Add a conection of a chosen value in the Conections Matrix 
+    self.Map_[Source,Target]=Value
+    
   
+    
+    
 if __name__ == '__main__':
   print("1: Constructor test")
   gm1=Genome(3,10)
@@ -84,4 +91,7 @@ if __name__ == '__main__':
   gm6.Add_Genes(3)
   print(gm6.H_==3,gm5.Hiden_==np.zeros(3),gm6.O_==4,gm6.I_==2)
   print(gm6.Map_==np.array([[0,1,0,1,0,0,0],[1,0,1,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]))
-   
+  print("7: Add_Connection test")
+  gm7=Genome(2,4)
+  gm7.Add_Connection(0,3,-8)
+  print(gm7.Map_[0,3]==-8)

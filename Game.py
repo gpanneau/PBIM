@@ -19,6 +19,8 @@ class Game:
     self.Grid[:,L-2:L]=np.ones((H,2),dtype=int)
     #Pop
     self.Pop=[]
+    #Time
+    self.Time=0
 
   def AddAgent(self,agent):
     self.Pop.append(agent)
@@ -32,3 +34,4 @@ if __name__ == '__main__':
   agent=Agent.Agent(2,2,Genome.Genome(10,4),g1)
   g1.AddAgent(agent)
   print(g1.Pop==[agent])
+  print(g1.Time==g2.Time==0)

@@ -25,6 +25,11 @@ class Agent:
       self.posY_=self.posY_-1
       return True
       
+  def MvForward(self):
+    if(self.decision_[1] and not(self.decision_[2]) and self.Environment_[self.posY_,self.posX_+1]!=1):
+      self.posX_=self.posX_+1
+      return True
+      
 
   
   

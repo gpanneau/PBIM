@@ -35,6 +35,11 @@ class Agent:
       self.posX_=self.posX_-1
       return True
       
+  def Fall(self):
+    if(self.Environment_[self.posY_+1,self.posX_]==0):
+      self.posY_=self.posY_+1
+      return True
+    
 
   
   

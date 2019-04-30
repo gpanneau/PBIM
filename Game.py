@@ -9,6 +9,8 @@ Created on Fri Apr  5 08:20:10 2019
 import numpy as np
 import Agent
 import Genome
+import ViewWorld
+import tkinter as tk
 
 class Game:
   def __init__(self,H=8,L=100):
@@ -68,7 +70,7 @@ if __name__ == '__main__':
   g2=Game(3,2)
   print(g2.Grid==[[1,1],[1,1],[1,1]])
   print(g1.Pop==g2.Pop==[])
-  agent=Agent.Agent(2,2,Genome.Genome(10,4),g1)
+  agent=Agent.Agent(2,2,Genome.Genome(10,4),g1.Grid)
   g1.AddAgent(agent)
   print(g1.Pop==[agent])
   print(g1.Time==g2.Time==0)
@@ -93,9 +95,13 @@ if __name__ == '__main__':
   Gsucces.Set_Map(np.loadtxt("Bobby"))
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
   w1.AddAgent(A2)
+  mywindow = tk.Tk()
+  mywindow.title("Fantastic Bobby")
+  myWorld = ViewWorld.CreateWorld(mywindow)
+  myWorld.pack(padx=000,pady=50)
   for i in range(40):
     w1.Grid[A2.posY_,A2.posX_]=2
-    print(w1.Grid)
+    myWorld.draw_grid(w1.Grid)
     w1.Grid[A2.posY_,A2.posX_]=0    
     input('Press <ENTER> to continue')
     w1.run()

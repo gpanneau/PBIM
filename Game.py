@@ -47,6 +47,17 @@ class Game:
         i+=1
       if i!=0:
         self.Grid[i-1][col]=1
+  
+  def run(self):
+    self.Time+=1
+    for Ag in self.Pop:
+      
+      Ag.Make_Decision()
+      if(not(Ag.Jump())):
+        Ag.Fall()
+      Ag.MvForward()
+      Ag.MvBackward()
+
 
 if __name__ == '__main__':
   g1=Game(8,30)
@@ -72,4 +83,18 @@ if __name__ == '__main__':
   print(g1.Grid)
   g1.AddBlockStratum(5,12)
   print(g1.Grid)
+  
+  w1=Game(L=30)
 
+  """w1.MakePit(9)
+  w1.MakePit(11)
+  Gsucces=Genome.Genome(25,3)
+  Gsucces.Set_Map(np.loadtxt("Bobby"))
+  A2=Agent.Agent(4,2,Gsucces,w1.Grid)
+  w1.AddAgent(A2)
+  for i in range(40):
+    w1.Grid[A2.posY_,A2.posX_]=2
+    print(w1.Grid)
+    w1.Grid[A2.posY_,A2.posX_]=0    
+    input('Press <ENTER> to continue')
+    w1.run()"""

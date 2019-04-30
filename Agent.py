@@ -40,7 +40,8 @@ class Agent:
       self.posY_=self.posY_+1
       return True
     
-
+  def Make_Decision(self):
+    self.decision_=self.Genome_.Processing(np.concatenate(self.Environment_[self.posY_-2:self.posY_+3,self.posX_-2:self.posX_+3]))
   
   
     

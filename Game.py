@@ -86,7 +86,7 @@ if __name__ == '__main__':
   
   w1=Game(L=30)
 
-  """w1.MakePit(9)
+  w1.MakePit(9)
   w1.MakePit(11)
   Gsucces=Genome.Genome(25,3)
   Gsucces.Set_Map(np.loadtxt("Bobby"))
@@ -97,4 +97,4 @@ if __name__ == '__main__':
     print(w1.Grid)
     w1.Grid[A2.posY_,A2.posX_]=0    
     input('Press <ENTER> to continue')
-    w1.run()"""
+    w1.run()

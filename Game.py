@@ -23,19 +23,15 @@ class Game:
     self.Pop=[]#Pop is a list containing all the different agents : the population
     #Time
     self.Time=0#Time is counting how many time the agents have been run.
+    #World
+    self.window = tk.Tk() #Creating a window
+    self.window.title("Fantastic Bobby")
+    self.World=ViewWorld.CreateWorld(self.window)
+    self.World.pack(padx=000,pady=50)
 
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
     self.Pop.append(agent)
-
-  """def run(self):
-    self.Time+=1
-    for agent in self.Pop:
-      agent.Make_Decision()
-      if(not(agent.Jump())):
-        agent.Fall()
-      agent.MvForward()
-      agent.MvBackward()"""
 
   def MakePit(self,x):
     """Create a gap at the column x. The last row is never changed."""
@@ -56,15 +52,44 @@ class Game:
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
-      
       Ag.Make_Decision()
       if(not(Ag.Jump())):
         Ag.Fall()
       Ag.MvForward()
       Ag.MvBackward()
+  
+  def printgrid(self):
+    self.World.draw_grid(self.Grid)
+    
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  
+  w1=Game(L=30)
+  w1.MakePit(9)
+  w1.MakePit(11)
+  Gsucces=Genome.Genome(25,3)
+  Gsucces.Set_Map(np.loadtxt("Bobby"))
+  A2=Agent.Agent(4,2,Gsucces,w1.Grid)
+  w1.AddAgent(A2)
+  def helloCallBack():
+  	print("Hello Python")
+
+  #mywindow = tk.Tk() #Creating a window
+  #mywindow.title("Fantastic Bobby")
+  #myWorld = ViewWorld.CreateWorld(mywindow) #Creating the world
+  #myWorld.pack(padx=000,pady=50)
+  
+  for i in range(40): #Number of iterations
+    w1.Grid[A2.posY_,A2.posX_]=2
+    w1.printgrid()
+    w1.Grid[A2.posY_,A2.posX_]=0    
+    #B = tk.Button(w1.window, text ="Hello", command = helloCallBack)
+    input('Press <ENTER> to continue')
+    w1.run()
+  
+  
+   
+"""    
   g1=Game(8,30)
   print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
   g2=Game(3,2)
@@ -74,9 +99,9 @@ if __name__ == '__main__':
   g1.AddAgent(agent)
   print(g1.Pop==[agent])
   print(g1.Time==g2.Time==0)
-  """g1.run()
+  """"""g1.run()
   g2.run()
-  print(g1.Time==g2.Time==1)"""
+  print(g1.Time==g2.Time==1)""""""
   g1.MakePit(10)
   print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
   g1.MakePit(29)
@@ -88,20 +113,4 @@ if __name__ == '__main__':
   print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
   g1.AddBlockStratum(5,12)
   print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  w1=Game(L=30)
-  w1.MakePit(9)
-  w1.MakePit(11)
-  Gsucces=Genome.Genome(25,3)
-  Gsucces.Set_Map(np.loadtxt("Bobby"))
-  A2=Agent.Agent(4,2,Gsucces,w1.Grid)
-  w1.AddAgent(A2)
-  mywindow = tk.Tk()
-  mywindow.title("Fantastic Bobby")
-  myWorld = ViewWorld.CreateWorld(mywindow)
-  myWorld.pack(padx=000,pady=50)
-  for i in range(40):
-    w1.Grid[A2.posY_,A2.posX_]=2
-    myWorld.draw_grid(w1.Grid)
-    w1.Grid[A2.posY_,A2.posX_]=0    
-    input('Press <ENTER> to continue')
-    w1.run()
+"""

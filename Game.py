@@ -54,12 +54,14 @@ class Game:
       Ag.MvForward()
       Ag.MvBackward()
 
-    def FindBestAgent(self):
+  def FindBestAgent(self):
     best= self.Pop[0]#first agent in the game population  as the best one
     for agent in self.Pop:#finds a better one if it exists
       if(agent.posX_>best.posX_):
         best=agent
     return best
+  
+  
   
 if __name__ == '__main__':
   g1=Game(8,30)

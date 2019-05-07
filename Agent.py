@@ -8,7 +8,7 @@ Created on Fri Apr  5 08:21:52 2019
 
 import numpy as np
 import Genome
-
+import math as mt
 class Agent:
   def __init__(self,x,y,myGenome,grid):#Constructor whitch takes an existing genome, a grid  and a position wanted for the agent on this grid
     self.posX_=x
@@ -43,6 +43,14 @@ class Agent:
   def Make_Decision(self):
     self.decision_=self.Genome_.Processing(np.concatenate(self.Environment_[self.posY_-2:self.posY_+3,self.posX_-2:self.posX_+3]))
   
+  def Mutate(self,mute_max,add_conect_prob): #Methode qui permet de muter le génome d'un Agent jusque à mute_max fois, ajoutant des conections ou des gènes
+    nb_mut=int(np.random.random()*mute_max) #le nombre de mutation que va subir le génome de l'agent
+    for i in range(nb_mut):
+      if np.random.random()<add_conect_prob: #construit une conexion avec une probabilité égale à add_conect_prob
+        self.Genome_.Add_Random_Connection(int(mt.floor( np.random.random()*3-1))) #Crée une connexion à une position aléatoire d'une valeur de 1, 0 ou -1 (1/3 de chance pour chaque)
+      else: # sinon ajoute une nouveau gène.
+        self.Genome_.Add_Genes(1)
+  
   
     
 if __name__ == '__main__':
@@ -55,4 +63,8 @@ if __name__ == '__main__':
   print(ag1.posX_==a,ag1.posY_==b,ag1.Genome_==genom1,ag1.Environment_,mat1,ag1.decision_==[0,0,0])
   print(ag1.Genome_)
   print(genom1)
-  
+  ag2=Agent(a,b,genom1,mat1)
+  print(ag2.Genome_.Map_)
+  ag2.Mutate(20,0.9)
+  print(ag2.Genome_.Map_)
+  print(int(-0.5))

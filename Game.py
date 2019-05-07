@@ -26,8 +26,10 @@ class Game:
     #World
     self.window = tk.Tk() #Creating a window
     self.window.title("Fantastic Bobby")
-    self.World=ViewWorld.CreateWorld(self.window)
-    self.World.pack(padx=000,pady=50)
+    self.frame = tk.Frame(master=self.window, width=1000, height=800, bg='blue')
+    self.frame.pack()
+    self.World=ViewWorld.CreateWorld(self.frame)
+    self.World.pack(padx=000,pady=000)
 
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
@@ -49,7 +51,9 @@ class Game:
       if i!=0:
         self.Grid[i-1][col]=1
   
+
   def run(self):
+    self.Grid[A2.posY_,A2.posX_]=2
     self.Time+=1
     for Ag in self.Pop:
       Ag.Make_Decision()
@@ -57,10 +61,14 @@ class Game:
         Ag.Fall()
       Ag.MvForward()
       Ag.MvBackward()
+    self.Grid[A2.posY_,A2.posX_]=0
   
-  def printgrid(self):
+  def printgrid(self):  
+    #def helloCallBack():
+  	#  print("Hello Python")
     self.World.draw_grid(self.Grid)
-    
+    B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
+                     command=lambda:self.run()).pack(side=tk.TOP)
 
 
 if __name__ == '__main__':  
@@ -71,21 +79,20 @@ if __name__ == '__main__':
   Gsucces.Set_Map(np.loadtxt("Bobby"))
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
   w1.AddAgent(A2)
-  def helloCallBack():
-  	print("Hello Python")
+  w1.printgrid()
+  input('It works')
 
   #mywindow = tk.Tk() #Creating a window
   #mywindow.title("Fantastic Bobby")
   #myWorld = ViewWorld.CreateWorld(mywindow) #Creating the world
   #myWorld.pack(padx=000,pady=50)
   
-  for i in range(40): #Number of iterations
+  """for i in range(40): #Number of iterations
     w1.Grid[A2.posY_,A2.posX_]=2
-    w1.printgrid()
+    
     w1.Grid[A2.posY_,A2.posX_]=0    
-    #B = tk.Button(w1.window, text ="Hello", command = helloCallBack)
     input('Press <ENTER> to continue')
-    w1.run()
+    #w1.run()"""
   
   
    

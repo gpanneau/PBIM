@@ -28,15 +28,6 @@ class Game:
     """Add an agent to the list Pop"""
     self.Pop.append(agent)
 
-  """def run(self):
-    self.Time+=1
-    for agent in self.Pop:
-      agent.Make_Decision()
-      if(not(agent.Jump())):
-        agent.Fall()
-      agent.MvForward()
-      agent.MvBackward()"""
-
   def MakePit(self,x):
     """Create a gap at the column x. The last row is never changed."""
     self.Grid[:len(self.Grid[:,x])-1,x]=np.zeros((len(self.Grid[:,x])-1),dtype=int)
@@ -63,7 +54,13 @@ class Game:
       Ag.MvForward()
       Ag.MvBackward()
 
-
+    def FindBestAgent(self):
+    best= self.Pop[0]#first agent in the game population  as the best one
+    for agent in self.Pop:#finds a better one if it exists
+      if(agent.posX_>best.posX_):
+        best=agent
+    return best
+  
 if __name__ == '__main__':
   g1=Game(8,30)
   print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
@@ -105,3 +102,13 @@ if __name__ == '__main__':
     w1.Grid[A2.posY_,A2.posX_]=0    
     input('Press <ENTER> to continue')
     w1.run()
+    
+  #test findbest agent
+  w1.AddAgent(agent)
+  print(agent.posX_)
+  print(agent)
+  print(A2.posX_)
+  print(A2)
+  best=w1.FindBestAgent()
+  print(best.posX_)
+  print(best)

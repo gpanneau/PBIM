@@ -53,15 +53,17 @@ class Game:
   
 
   def run(self):
-    self.Grid[A2.posY_,A2.posX_]=2
+    self.Grid[A2.posY_,A2.posX_]=0
     self.Time+=1
+    print('run')
     for Ag in self.Pop:
       Ag.Make_Decision()
       if(not(Ag.Jump())):
         Ag.Fall()
       Ag.MvForward()
       Ag.MvBackward()
-    self.Grid[A2.posY_,A2.posX_]=0
+    self.Grid[A2.posY_,A2.posX_]=2
+    self.World.draw_grid(self.Grid)
   
   def printgrid(self):  
     #def helloCallBack():
@@ -79,6 +81,7 @@ if __name__ == '__main__':
   Gsucces.Set_Map(np.loadtxt("Bobby"))
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
   w1.AddAgent(A2)
+  w1.Grid[A2.posY_,A2.posX_]=2
   w1.printgrid()
   input('It works')
 

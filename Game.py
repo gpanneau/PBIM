@@ -70,7 +70,14 @@ class Game:
     self.World.draw_grid(self.Grid)
     B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
                      command=lambda:self.run()).pack(side=tk.TOP)
-
+                     
+  def FindBestAgent(self):
+    best= self.Pop[0]#first agent in the game population  as the best one
+    for agent in self.Pop:#finds a better one if it exists
+      if(agent.posX_>best.posX_):
+        best=agent
+    return best
+  
 
 if __name__ == '__main__':  
   w1=Game(L=30)
@@ -84,7 +91,6 @@ if __name__ == '__main__':
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   
-   
   g1=Game(8,30)
   print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
   g2=Game(3,2)
@@ -109,3 +115,13 @@ if __name__ == '__main__':
   g1.AddBlockStratum(5,12)
   print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
 
+  
+  #test findbest agent
+  w1.AddAgent(agent)
+  print(agent.posX_)
+  print(agent)
+  print(A2.posX_)
+  print(A2)
+  best=w1.FindBestAgent()
+  print(best.posX_)
+  print(best)

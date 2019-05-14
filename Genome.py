@@ -64,6 +64,13 @@ class Genome:
   def Add_Random_Connection(self,Value=1):
     self.Add_Connection(int(np.random.random()*(self.H_+self.I_)),int(np.random.random()*(self.H_+self.O_)),Value) # Add a conection of a chosen value in a random position in the Conections Matrix 
    
+  def SetMap_From_Txt(self,namefile):#recuperates a matrix in a txt file and atrributes it to the Map_ attribute of the current Genom object
+   self.Set_Map(np.loadtxt("Bobby"))
+    
+  def PutMap_Into_Txt(self, namefile):#recuperates the Map_ of the current Genom object and write it into a file txt
+   namefile=namefile+".txt"
+   np.savetxt(namefile, self.Map_, fmt='%d')
+    
     
 if __name__ == '__main__':
   print("1: Constructor test")
@@ -112,4 +119,10 @@ if __name__ == '__main__':
   for i in range(4):
     if gm8.Map_[0,i]==-2.5:
       print(True)
-    
+      
+  print("9: PutMap_Into_Txt and test")
+  gm6.PutMap_Into_Txt("testgm6")
+  gm9=Genome()
+  gm9.SetMap_From_Txt("testgm6")
+   
+   

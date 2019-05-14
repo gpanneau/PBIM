@@ -20,17 +20,17 @@ class Genome:
     
     self.Map_=np.zeros((I,O))  #Conection Matrix
     
-  def Copy_Genom(self,Gen):  #Copy 
+  def Copy_Genom(self,model):  #modify the current genom to be a copy of the Genom ojevt "model"
     
-    self.O_=Gen.O_  
+    self.O_=model.O_  
     
-    self.I_=Gen.I_  
+    self.I_=model.I_  
     
-    self.H_=Gen.H_ 
+    self.H_=model.H_ 
     
-    self.Hiden_=Gen.Hiden_[:]  
+    self.Hiden_=model.Hiden_[:]  
     
-    self.Map_=Gen.Map_[:,:]  
+    self.Map_=np.copy(model.Map_) 
 
 
   def Set_Map(self,Matrix):  #Matrix Seter by copy
@@ -75,13 +75,18 @@ if __name__ == '__main__':
   print("3: Processing test")
   gm3=Genome(2,4)
   gm3.Set_Map(np.array([[0,1,0,1],[1,0,1,0]]))
-  print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
   print(gm3.Processing(np.array([0,1]))==np.array([True,False,True,False]))
+  print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  
   print("4: Copy_Genom test")
   gm4=Genome(14,12)
   gm4.Copy_Genom(gm3)
+  gm4.Set_Map(np.array([[1, 2], [3, 4]]))
+  print(gm4.Map_)
+  print(gm3.Map_)
   print(gm4.Processing(np.array([0,1]))==np.array([True,False,True,False]))
   print(gm4.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  
   print("5: Add_Gene test")
   gm5=Genome(2,4)
   gm5.Add_Gene()

@@ -20,17 +20,17 @@ class Genome:
     
     self.Map_=np.zeros((I,O))  #Conection Matrix
     
-  def Copy_Genom(self,Gen):  #Copy 
+  def Copy_Genom(self,model):  #modify the current genom to be a copy of the Genom ojevt "model"
     
-    self.O_=Gen.O_  
+    self.O_=model.O_  
     
-    self.I_=Gen.I_  
+    self.I_=model.I_  
     
-    self.H_=Gen.H_ 
+    self.H_=model.H_ 
     
-    self.Hiden_=Gen.Hiden_[:]  
+    self.Hiden_=model.Hiden_[:]  
     
-    self.Map_=Gen.Map_[:,:]  
+    self.Map_=np.copy(model) 
 
 
   def Set_Map(self,Matrix):  #Matrix Seter by copy

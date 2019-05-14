@@ -33,6 +33,7 @@ class Genome:
     self.Map_=np.copy(model.Map_) 
 
 
+
   def Set_Map(self,Matrix):  #Matrix Seter by copy
     self.H_=len(Matrix)-self.I_
     self.Hiden_=np.zeros((1,self.H_))

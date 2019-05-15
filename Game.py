@@ -100,14 +100,19 @@ class Game:
     return [best,x]
   
   def PopTest(self):
+    print("popTest")
     bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
-    while self.Time<2*len(self.Grid[0]) and bestPosition[1]<(len(self.Grid[0])-3):
+    while self.Time<2*len(self.Grid[0]) and bestPosition[1]<(len(self.Grid[0,:])-3):
       self.RunBlind()
       self.Time+=1
       bestPosition=self.FindBestAgent()
+    print("bestX")
+    print(bestPosition[1])
   
-  def Evolve(self,Children,generation):
+  def Evolve(self,Children,generation,MutationsRate):
     for i in range(generation):
+      print(i)
+      self.Time=0
       self.PopTest()
       Father=self.Pop[self.FindBestAgent()[0]]
       self.Pop=[]
@@ -116,7 +121,7 @@ class Game:
         G.Set_Map(Father.Genome_.Map_[:,:])
         A=Agent.Agent(4,2,G,self.Grid)
         if j!=0:
-          A.Mutate(30,0.95)
+          A.Mutate(MutationsRate,0.95)
         self.AddAgent(A)
     
   
@@ -181,6 +186,6 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.Evolve(1000,10)
+  w1.Evolve(100,10,5)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...

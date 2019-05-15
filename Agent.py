@@ -17,6 +17,7 @@ class Agent:
     self.Genome_.Set_Map(myGenome.Map_)
     self.Environment_=np.matrix.copy(grid)
     self.decision_=[False,False,False]
+    self.Alive= True
     
     
     
@@ -38,6 +39,12 @@ class Agent:
   def Fall(self):
     if(self.Environment_[self.posY_+1,self.posX_]==0):
       self.posY_=self.posY_+1
+      print(self.posY_)
+      print(len(self.Environment_[:,0]))
+      
+      if self.posY_==len(self.Environment_[:,0])-2:
+        print("dead")
+        self.Alive=False
       return True
     
   def Make_Decision(self):

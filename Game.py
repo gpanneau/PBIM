@@ -16,7 +16,7 @@ class Game:
   def __init__(self,H=9,L=100):
     #Grid
     self.Grid=np.zeros((H,L),dtype=int)#The grid is a table full of zeros (H columns x L rows)
-    self.Grid[H-4:H,:]=np.ones((4,L),dtype=int)#The grid has the 4 lines at the bottom full of ones (the floor)
+    self.Grid[H-2:H,:]=np.ones((2,L),dtype=int)#The grid has the 2 lines at the bottom full of ones (the floor)
     self.Grid[:,0:2]=np.ones((H,2),dtype=int)#The grid has the 2 columns at the lest full of ones (the left wall)
     self.Grid[:,L-2:L]=np.ones((H,2),dtype=int)#The grid has the 2 columns at the right full of ones (the right wall)
     #Pop
@@ -37,7 +37,7 @@ class Game:
 
   def MakePit(self,x):
     """Create a gap at the column x. The last row is never changed."""
-    self.Grid[:len(self.Grid[:,x])-2,x]=np.zeros((len(self.Grid[:,x])-2),dtype=int)
+    self.Grid[:,x]=np.zeros((len(self.Grid[:,x])),dtype=int)
 
   def AddBlockStratum(self,xl,xr):
     """Create a new block Stratum. Preferentially don't use this method over a pit.
@@ -55,28 +55,33 @@ class Game:
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
-      self.Grid[Ag.posY_,Ag.posX_]=0
+      if Ag.Alive:
+        self.Grid[Ag.posY_,Ag.posX_]=0
     for Ag in self.Pop:
-      self.Grid[Ag.posY_,Ag.posX_]=0
-      Ag.Make_Decision()
-      if(not(Ag.Jump())):
-        Ag.Fall()
-      Ag.MvForward()
-      Ag.MvBackward()
+      if Ag.Alive:
+        self.Grid[Ag.posY_,Ag.posX_]=0
+        Ag.Make_Decision()
+        if(not(Ag.Jump())):
+          Ag.Fall()
+        Ag.MvForward()
+        Ag.MvBackward()
     for Ag in self.Pop:
-      self.Grid[Ag.posY_,Ag.posX_]=2
+      if Ag.Alive:
+        self.Grid[Ag.posY_,Ag.posX_]=2
     self.World.draw_grid(self.Grid)
     for Ag in self.Pop:
-      self.Grid[Ag.posY_,Ag.posX_]=0
+      if Ag.Alive:
+        self.Grid[Ag.posY_,Ag.posX_]=0
       
   def RunBlind(self): #run without printing anything
     self.Time+=1
     for Ag in self.Pop:
-      Ag.Make_Decision()
-      if(not(Ag.Jump())):
-        Ag.Fall()
-      Ag.MvForward()
-      Ag.MvBackward()
+      if Ag.Alive:
+        Ag.Make_Decision()
+        if(not(Ag.Jump())):
+          Ag.Fall()
+        Ag.MvForward()
+        Ag.MvBackward()
   
   def printgrid(self):  
     #def helloCallBack():
@@ -89,7 +94,7 @@ class Game:
     best=0
     x=0
     for agent in range(len(self.Pop)):#finds a better one if it exists
-      if(self.Pop[agent].posX_>x):
+      if(self.Pop[agent].Alive and self.Pop[agent].posX_>x):
         best=agent
         x=self.Pop[agent].posX_
     return [best,x]
@@ -117,14 +122,14 @@ class Game:
   
 
 if __name__ == '__main__':  
-  w1=Game(H=12,L=30)
+  w1=Game(L=30)
+  w1.AddBlockStratum(5,12)
+  w1.AddBlockStratum(7,15)
+  w1.AddBlockStratum(18,21)
   w1.MakePit(9)
   w1.MakePit(11)
   w1.MakePit(15)
   w1.MakePit(20)
-  w1.AddBlockStratum(5,12)
-  w1.AddBlockStratum(7,15)
-  w1.AddBlockStratum(18,21)
   """Gsucces=Genome.Genome(25,3)
   Gsucces.Set_Map(np.loadtxt("Bobby"))
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
@@ -176,6 +181,6 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.Evolve(5000,50)
+  w1.Evolve(1000,10)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...

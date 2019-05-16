@@ -83,9 +83,11 @@ class Game:
         Ag.MvBackward()
         
   def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
-    i = len(self.Pop)-1
-    
-    while i!=0 :
+    for agent in self.Pop:
+      if not agent.Alive:
+        agent.posX_=-1 #
+    i = len(self.Pop)-1 #si les agent sont mort on set leurs posx (fitness) à -1
+    while i!=0 : #algorithme de tri en fonction de posX_
       for j in range(i):
         if self.Pop[j].posX_<self.Pop[j+1].posX_:
           inter=self.Pop[j]
@@ -112,19 +114,36 @@ class Game:
     return [best,x]
   
   def PopTest(self):
-    print("popTest")
     bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
     while self.Time<2*len(self.Grid[0,:]) and bestPosition[1]<(len(self.Grid[0,:])-3):
       self.RunBlind()
       self.Time+=1
       bestPosition=self.FindBestAgent()
     self.Time=0
-    print("bestX")
-    print(bestPosition[1])
-  
+  def EvolveByDivision(self,IndivMax,Generation,MutationsRate):
+    for i in range(Generation):
+      self.PopTest()
+      self.SortByFitness()
+      j=0
+      PopBis=[]
+      for agent in self.Pop:
+        if j<IndivMax:
+          agent.posX_=4
+          agent.posy_=2
+          agent.Mutate(MutationsRate,0.95)
+          PopBis.append(agent)
+          j+=1
+          if j<IndivMax:
+            G=Genome.Genome(25,3)
+            G.Set_Map(agent.Genome_.Map_[:,:])
+            A=Agent.Agent(4,2,G,self.Grid)
+            A.Mutate(MutationsRate,0.95)
+            PopBis.append(A)
+            j+=1
+      self.Pop=PopBis
+    
   def Evolve(self,Children,generation,MutationsRate):
     for i in range(generation):
-      print(i)
       self.PopTest()
       Father=self.Pop[self.FindBestAgent()[0]]
       self.Pop=[]
@@ -198,16 +217,23 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.Evolve(200,10,10)
+  w1.EvolveByDivision(200,50,10)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
   i = 0
   for agent in w1.Pop:
-    if agent.posX_==27:
+    if agent.posX_==(len(w1.Grid[0,:])-3):
       i+=1
-  print(i)
-  print("test Sortbyfiness")
-  w1.SortByFitness()
+  print(100*i/len(w1.Pop),"""% d'efficacité""")
+  w1.Pop=[]
+  w1.AddAgent(A1)
+  w1.Evolve(200,50,10)
+  w1.printgrid()
+  input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
+  w1.PopTest()
+  i = 0
   for agent in w1.Pop:
-    print(agent.posX_)
+    if agent.posX_==(len(w1.Grid[0,:])-3):
+      i+=1
+  print(100*i/len(w1.Pop),"""% d'efficacité""")

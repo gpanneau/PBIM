@@ -51,7 +51,6 @@ class Game:
       if i!=0:
         self.Grid[i-1][col]=1
   
-
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
@@ -82,6 +81,19 @@ class Game:
           Ag.Fall()
         Ag.MvForward()
         Ag.MvBackward()
+        
+  def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
+    i = len(self.Pop)-1
+    
+    while i!=0 :
+      for j in range(i):
+        if self.Pop[j].posX_<self.Pop[j+1].posX_:
+          inter=self.Pop[j]
+          self.Pop[j]=self.Pop[j+1]
+          self.Pop[j+1]=inter
+          
+      i=i-1
+    
   
   def printgrid(self):  
     #def helloCallBack():
@@ -102,17 +114,17 @@ class Game:
   def PopTest(self):
     print("popTest")
     bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
-    while self.Time<2*len(self.Grid[0]) and bestPosition[1]<(len(self.Grid[0,:])-3):
+    while self.Time<2*len(self.Grid[0,:]) and bestPosition[1]<(len(self.Grid[0,:])-3):
       self.RunBlind()
       self.Time+=1
       bestPosition=self.FindBestAgent()
+    self.Time=0
     print("bestX")
     print(bestPosition[1])
   
   def Evolve(self,Children,generation,MutationsRate):
     for i in range(generation):
       print(i)
-      self.Time=0
       self.PopTest()
       Father=self.Pop[self.FindBestAgent()[0]]
       self.Pop=[]
@@ -186,6 +198,16 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.Evolve(100,10,5)
+  w1.Evolve(200,10,10)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
+  w1.PopTest()
+  i = 0
+  for agent in w1.Pop:
+    if agent.posX_==27:
+      i+=1
+  print(i)
+  print("test Sortbyfiness")
+  w1.SortByFitness()
+  for agent in w1.Pop:
+    print(agent.posX_)

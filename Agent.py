@@ -17,6 +17,7 @@ class Agent:
     self.Genome_.Set_Map(myGenome.Map_)
     self.Environment_=np.matrix.copy(grid)
     self.decision_=[False,False,False]
+    self.Alive= True
     
     
     
@@ -38,6 +39,8 @@ class Agent:
   def Fall(self):
     if(self.Environment_[self.posY_+1,self.posX_]==0):
       self.posY_=self.posY_+1
+      if self.posY_==len(self.Environment_[:,0])-2:
+        self.Alive=False
       return True
     
   def Make_Decision(self):
@@ -47,7 +50,7 @@ class Agent:
     nb_mut=int(np.random.random()*mute_max) #le nombre de mutation que va subir le génome de l'agent
     for i in range(nb_mut):
       if np.random.random()<add_conect_prob: #construit une conexion avec une probabilité égale à add_conect_prob
-        self.Genome_.Add_Random_Connection(int(mt.floor( np.random.random()*3-1))) #Crée une connexion à une position aléatoire d'une valeur de 1, 0 ou -1 (1/3 de chance pour chaque)
+        self.Genome_.Add_Random_Connection(int(mt.floor( np.random.random()*2.5-0.5))) #Crée une connexion à une position aléatoire d'une valeur de 1, 0 ou -1 (1/3 de chance pour chaque)
       else: # sinon ajoute une nouveau gène.
         self.Genome_.Add_Genes(1)
   
@@ -65,6 +68,6 @@ if __name__ == '__main__':
   print(genom1)
   ag2=Agent(a,b,genom1,mat1)
   print(ag2.Genome_.Map_)
-  ag2.Mutate(20,0.9)
+  ag2.Mutate(100,0.95)
   print(ag2.Genome_.Map_)
   print(int(-0.5))

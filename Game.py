@@ -11,6 +11,7 @@ import Agent
 import Genome
 import ViewWorld
 import tkinter as tk
+import time
 
 class Game:
   def __init__(self,H=8,L=100):
@@ -30,6 +31,8 @@ class Game:
     self.frame.pack()
     self.World=ViewWorld.CreateWorld(self.frame)
     self.World.pack(padx=000,pady=000)
+    B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+    ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.RIGHT)
 
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
@@ -64,13 +67,14 @@ class Game:
     self.Grid[A2.posY_,A2.posX_]=2
     self.World.draw_grid(self.Grid)
   
-  def printgrid(self):  
-    #def helloCallBack():
-  	#  print("Hello Python")
+  def printgridstep(self):  
     self.World.draw_grid(self.Grid)
-    B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
-                     command=lambda:self.run()).pack(side=tk.TOP)
-                     
+    #B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.TOP)
+  
+  #def PrintWhileRunning(self):
+  #  self.World.draw_grid(self.Grid)
+  #  ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='black', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.TOP)
+  
   def FindBestAgent(self):
     best= self.Pop[0]#first agent in the game population  as the best one
     for agent in self.Pop:#finds a better one if it exists
@@ -88,7 +92,8 @@ if __name__ == '__main__':
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
   w1.AddAgent(A2)
   w1.Grid[A2.posY_,A2.posX_]=2
-  w1.printgrid()
+  w1.printgridstep()
+ 
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   
   g1=Game(8,30)

@@ -41,7 +41,7 @@ class Agent:
       return True
     
   def Make_Decision(self):
-    self.decision_=self.Genome_.Processing(np.concatenate(self.Environment_[self.posY_-2:self.posY_+3,self.posX_-2:self.posX_+3]))
+    self.decision_ = self.Genome_.Processing (np.concatenate(self.Environment_ [self.posY_-2 : self.posY_+3, self.posX_-2:self.posX_+3]))
   
   def Mutate(self,mute_max,add_conect_prob): #Methode qui permet de muter le génome d'un Agent jusque à mute_max fois, ajoutant des conections ou des gènes
     nb_mut=int(np.random.random()*mute_max) #le nombre de mutation que va subir le génome de l'agent

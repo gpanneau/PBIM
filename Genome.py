@@ -20,17 +20,18 @@ class Genome:
     
     self.Map_=np.zeros((I,O))  #Conection Matrix
     
-  def Copy_Genom(self,Gen):  #Copy 
+  def Copy_Genom(self,model):  #modify the current genom to be a copy of the Genom ojevt "model"
     
-    self.O_=Gen.O_  
+    self.O_=model.O_  
     
-    self.I_=Gen.I_  
+    self.I_=model.I_  
     
-    self.H_=Gen.H_ 
+    self.H_=model.H_ 
     
-    self.Hiden_=Gen.Hiden_[:]  
+    self.Hiden_=model.Hiden_[:]  
     
-    self.Map_=Gen.Map_[:,:]  
+    self.Map_=np.copy(model.Map_) 
+
 
 
   def Set_Map(self,Matrix):  #Matrix Seter by copy
@@ -63,6 +64,13 @@ class Genome:
   def Add_Random_Connection(self,Value=1):
     self.Add_Connection(int(np.random.random()*(self.H_+self.I_)),int(np.random.random()*(self.H_+self.O_)),Value) # Add a conection of a chosen value in a random position in the Conections Matrix 
    
+  def SetMap_From_Txt(self,namefile):#recuperates a matrix in a txt file and atrributes it to the Map_ attribute of the current Genom object
+   self.Set_Map(np.loadtxt("Bobby"))
+    
+  def PutMap_Into_Txt(self, namefile):#recuperates the Map_ of the current Genom object and write it into a file txt
+   namefile=namefile+".txt"
+   np.savetxt(namefile, self.Map_, fmt='%d')
+    
     
 if __name__ == '__main__':
   print("1: Constructor test")
@@ -75,13 +83,18 @@ if __name__ == '__main__':
   print("3: Processing test")
   gm3=Genome(2,4)
   gm3.Set_Map(np.array([[0,1,0,1],[1,0,1,0]]))
-  print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
   print(gm3.Processing(np.array([0,1]))==np.array([True,False,True,False]))
+  print(gm3.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  
   print("4: Copy_Genom test")
   gm4=Genome(14,12)
   gm4.Copy_Genom(gm3)
+  gm4.Set_Map(np.array([[1, 2], [3, 4]]))
+  print(gm4.Map_)
+  print(gm3.Map_)
   print(gm4.Processing(np.array([0,1]))==np.array([True,False,True,False]))
   print(gm4.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  
   print("5: Add_Gene test")
   gm5=Genome(2,4)
   gm5.Add_Gene()
@@ -106,4 +119,10 @@ if __name__ == '__main__':
   for i in range(4):
     if gm8.Map_[0,i]==-2.5:
       print(True)
-    
+      
+  print("9: PutMap_Into_Txt and test")
+  gm6.PutMap_Into_Txt("testgm6")
+  gm9=Genome()
+  gm9.SetMap_From_Txt("testgm6")
+   
+   

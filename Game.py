@@ -31,6 +31,8 @@ class Game:
     self.World=ViewWorld.CreateWorld(self.frame)
     self.World.pack(padx=000,pady=000)
 
+    B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
+                     command=lambda:self.run()).pack(side=tk.TOP)
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
     self.Pop.append(agent)
@@ -101,8 +103,6 @@ class Game:
     #def helloCallBack():
   	#  print("Hello Python")
     self.World.draw_grid(self.Grid)
-    B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
-                     command=lambda:self.run()).pack(side=tk.TOP)
                      
   def FindBestAgent(self):
     best=0
@@ -120,41 +120,51 @@ class Game:
       self.Time+=1
       bestPosition=self.FindBestAgent()
     self.Time=0
-  def EvolveByDivision(self,IndivMax,Generation,MutationsRate):
+  def EvolveByDivision(self,IndivMax,MutationsRate,Generation=200):
+    end=False;
     for i in range(Generation):
-      self.PopTest()
-      self.SortByFitness()
+      self.PopTest()#fait résoudre le circuit à l'ensemble de la population
+      self.SortByFitness()# tris les individus par fitness dans l'ordre décroissant
+      if (self.Pop[0].posX_==len(self.Grid[0,:])-3):# verifie quaucun individu n'a complètement résolut le circuit
+        end=True
       j=0
       PopBis=[]
-      for agent in self.Pop:
+      for agent in self.Pop:#chaque agent peut se reproduire dans la limite des places disponible. Les plus performent se reproduiront en premier
         if j<IndivMax:
           agent.posX_=4
           agent.posy_=2
-          agent.Mutate(MutationsRate,0.95)
+          #agent.Mutate(MutationsRate,1)
           PopBis.append(agent)
           j+=1
           if j<IndivMax:
             G=Genome.Genome(25,3)
             G.Set_Map(agent.Genome_.Map_[:,:])
             A=Agent.Agent(4,2,G,self.Grid)
-            A.Mutate(MutationsRate,0.95)
+            A.Mutate(MutationsRate,1)
             PopBis.append(A)
             j+=1
       self.Pop=PopBis
-    
-  def Evolve(self,Children,generation,MutationsRate):
-    for i in range(generation):
+      if end:
+        return i
+    return Generation
+  def Evolve(self,Children,MutationsRate,Generation=200):
+    end=False
+    for i in range(Generation):
       self.PopTest()
       Father=self.Pop[self.FindBestAgent()[0]]
+      if (Father.posX_==len(self.Grid[0,:])-3):
+        end=True 
       self.Pop=[]
       for j in range(Children):
         G=Genome.Genome(25,3)
         G.Set_Map(Father.Genome_.Map_[:,:])
         A=Agent.Agent(4,2,G,self.Grid)
         if j!=0:
-          A.Mutate(MutationsRate,0.95)
+          A.Mutate(MutationsRate,1)
         self.AddAgent(A)
-    
+      if end:
+        return i
+    return Generation
   
 
 if __name__ == '__main__':  
@@ -217,7 +227,7 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.EvolveByDivision(200,50,10)
+  w1.EvolveByDivision(50,5)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
@@ -228,7 +238,7 @@ if __name__ == '__main__':
   print(100*i/len(w1.Pop),"""% d'efficacité""")
   w1.Pop=[]
   w1.AddAgent(A1)
-  w1.Evolve(200,50,10)
+  w1.Evolve(50,5)
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()

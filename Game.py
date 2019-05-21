@@ -11,6 +11,7 @@ import Agent
 import Genome
 import ViewWorld
 import tkinter as tk
+import time
 
 class Game:
   def __init__(self,H=9,L=100):
@@ -120,7 +121,8 @@ class Game:
       self.Time+=1
       bestPosition=self.FindBestAgent()
     self.Time=0
-  def EvolveByDivision(self,IndivMax,MutationsRate,Generation=200):
+  def EvolveByDivision(self,IndivMax,MutationsRate,Generation=500):
+    t=time.time()
     end=False;
     for i in range(Generation):
       self.PopTest()#fait résoudre le circuit à l'ensemble de la population
@@ -145,9 +147,10 @@ class Game:
             j+=1
       self.Pop=PopBis
       if end:
-        return i
-    return Generation
-  def Evolve(self,Children,MutationsRate,Generation=200):
+        return time.time()-t
+    return time.time()-t
+  def Evolve(self,Children,MutationsRate,Generation=500):
+    t=time.time()
     end=False
     for i in range(Generation):
       self.PopTest()
@@ -163,8 +166,8 @@ class Game:
           A.Mutate(MutationsRate,1)
         self.AddAgent(A)
       if end:
-        return i
-    return Generation
+        return time.time()-t
+    return time.time()-t
   
 
 if __name__ == '__main__':  
@@ -225,9 +228,8 @@ if __name__ == '__main__':
   print(best)"""
   Galea=Genome.Genome(25,3)
   A1=Agent.Agent(4,2,Galea,w1.Grid)
-  A1.Mutate(100,0.95)
   w1.AddAgent(A1)
-  w1.EvolveByDivision(50,5)
+  print(w1.EvolveByDivision(50,5)," seconde de calcule")
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
@@ -238,7 +240,7 @@ if __name__ == '__main__':
   print(100*i/len(w1.Pop),"""% d'efficacité""")
   w1.Pop=[]
   w1.AddAgent(A1)
-  w1.Evolve(50,5)
+  print(w1.Evolve(50,5)," seconde de calcule")
   w1.printgrid()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()

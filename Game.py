@@ -45,15 +45,26 @@ class Game:
   def AddBlockStratum(self,xl,xr):
     """Create a new block Stratum. Preferentially don't use this method over a pit.
        xr>=0 and xl<L"""
-    L=len(self.Grid[0])
     H=len(self.Grid)
     for col in range(xl,xr+1):
       i=0
       while i<H and self.Grid[i][col]!=1:
         i+=1
-      if i!=0:
+      if i!=0 and i!=H:
         self.Grid[i-1][col]=1
-  
+  def Random_Level_generation(self,nbPit,nblayer):
+    for i in range(nbPit):
+      x=int(np.random.random()*(len(self.Grid[0,:])-5)+2)
+      if self.Grid[len(self.Grid)-1,x-1]!=0 and self.Grid[len(self.Grid)-1,x+1]!=0:
+        self.MakePit(x)
+    dicti={}
+    for i in range(nblayer):
+      xl=int(np.random.random()*(len(self.Grid[0,:])-5)+2)
+      xr=xl+int(np.random.random()*4)+1
+      if self.Grid[len(self.Grid)-1,xl]!=0 and self.Grid[len(self.Grid)-1,xl-1]!=0 and xr<len(self.Grid[0,:])-2 and xl not in dicti:
+        self.AddBlockStratum(xl,xr)
+        dicti[xl]=xr
+    return True
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
@@ -172,14 +183,15 @@ class Game:
 
 if __name__ == '__main__':  
   w1=Game(L=30)
-  w1.AddBlockStratum(5,12)
+  w1.Random_Level_generation(5,10)
+  """w1.AddBlockStratum(5,12)
   w1.AddBlockStratum(7,15)
   w1.AddBlockStratum(18,21)
   w1.MakePit(9)
   w1.MakePit(11)
   w1.MakePit(15)
   w1.MakePit(20)
-  """Gsucces=Genome.Genome(25,3)
+  Gsucces=Genome.Genome(25,3)
   Gsucces.Set_Map(np.loadtxt("Bobby"))
   A2=Agent.Agent(4,2,Gsucces,w1.Grid)
   w1.AddAgent(A2)

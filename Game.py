@@ -31,9 +31,9 @@ class Game:
     self.frame.pack()
     self.World=ViewWorld.CreateWorld(self.frame)
     self.World.pack(padx=000,pady=000)
-
-    B = tk.Button(master=self.frame, text="Run Bobby, RUN!!!!", bg='yellow', fg='red', width=25, height = 5,
-                     command=lambda:self.run()).pack(side=tk.TOP)
+    self.B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+    self.ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.RIGHT) #remplacer run par RunContinue quand la méthode marchera
+    
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
     self.Pop.append(agent)
@@ -111,11 +111,15 @@ class Game:
       i=i-1
     
   
-  def printgrid(self):  
-    #def helloCallBack():
-  	#  print("Hello Python")
+  """def RunContinue(self): #Ce bouton ne marche pas encore, on ne sait pas pourquoi, mais il n'affiche Bobby qu'à la toute fin!!!
+    for i in range(40):
+      time.sleep(0.5)
+      self.run()
+      print("yo")"""
+  
+  def printgridstep(self):  
     self.World.draw_grid(self.Grid)
-                     
+
   def FindBestAgent(self):
     best=0
     x=0
@@ -200,7 +204,7 @@ if __name__ == '__main__':
     A1=Agent.Agent(4,2,Gsucces,w1.Grid)
     A1.Mutate(100,0.95)
     w1.AddAgent(A1)"""
-  #w1.printgrid()
+  #w1.printgridstep()
   #input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
 
   """ g1=Game(8,30)
@@ -242,7 +246,7 @@ if __name__ == '__main__':
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   w1.AddAgent(A1)
   print(w1.EvolveByDivision(50,5)," seconde de calcule")
-  w1.printgrid()
+  w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
   i = 0
@@ -253,7 +257,7 @@ if __name__ == '__main__':
   w1.Pop=[]
   w1.AddAgent(A1)
   print(w1.Evolve(50,5)," seconde de calcule")
-  w1.printgrid()
+  w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
   i = 0

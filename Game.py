@@ -31,8 +31,8 @@ class Game:
     self.frame.pack()
     self.World=ViewWorld.CreateWorld(self.frame)
     self.World.pack(padx=000,pady=000)
-    B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
-    ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.RIGHT)
+    self.B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+    self.ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.RIGHT) #remplacer run par RunContinue quand la méthode marchera
 
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
@@ -67,14 +67,15 @@ class Game:
     self.Grid[A2.posY_,A2.posX_]=2
     self.World.draw_grid(self.Grid)
   
+  """def RunContinue(self): #Ce bouton ne marche pas encore, on ne sait pas pourquoi, mais il n'affiche Bobby qu'à la toute fin!!!
+    for i in range(40):
+      time.sleep(0.5)
+      self.run()
+      print("yo")"""
+  
   def printgridstep(self):  
     self.World.draw_grid(self.Grid)
-    #B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.TOP)
-  
-  #def PrintWhileRunning(self):
-  #  self.World.draw_grid(self.Grid)
-  #  ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='black', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.TOP)
-  
+
   def FindBestAgent(self):
     best= self.Pop[0]#first agent in the game population  as the best one
     for agent in self.Pop:#finds a better one if it exists

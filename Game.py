@@ -25,14 +25,10 @@ class Game:
     #Time
     self.Time=0#Time is counting how many time the agents have been run.
     #World
-    self.window = tk.Tk() #Creating a window
-    self.window.title("Fantastic Bobby")
-    self.frame = tk.Frame(master=self.window, width=1000, height=800, bg='blue')
-    self.frame.pack(expand=tk.YES)
-    self.World=ViewWorld.CreateWorld(self.frame)
+    self.World=ViewWorld.CreateWorld()
     self.World.pack(padx=000,pady=000)
-    self.B = tk.Button(master=self.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
-    self.ButtonContinue = tk.Button(master=self.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.RunContinue()).pack(side=tk.RIGHT) #remplacer run par RunContinue quand la méthode marchera
+    self.B = tk.Button(master=self.World.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+    self.ButtonContinue = tk.Button(master=self.World.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.RunContinue()).pack(side=tk.RIGHT) #remplacer run par RunContinue quand la méthode marchera
     
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""

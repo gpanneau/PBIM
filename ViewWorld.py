@@ -1,17 +1,32 @@
 import tkinter as tk
 
 class CreateWorld(tk.Canvas):
-	def __init__(self, fenetre):
-		tk.Canvas.__init__(self, width = 1000, height = 300, highlightthickness=0,bg="green")
-		self.size_in_pixels = 1000
+	def __init__(self):
+		self.window = tk.Tk() #Creating a window
+		self.window.title("Fantastic Bobby")
+		self.frame = tk.Frame(master=self.window, width=1000, height=800, bg='blue')
+		self.frame.pack(expand=tk.YES)
+		self.mycanvas = tk.Canvas.__init__(self, width = 1915, height = 1000, highlightthickness=0 ,bg="green")
+		self.bind("<Configure>", self.on_resize)
+		self.height = self.winfo_reqheight()
+		self.width = self.winfo_reqwidth()
 				
+	def on_resize(self,event):
+		# determine the ratio of old width/height to new width/height
+		wscale = float(event.width)/self.width
+		hscale = float(event.height)/self.height
+		self.width = event.width
+		self.height = event.height
+		# resize the canvas 
+		self.config(width=self.width, height=self.height)
+		# rescale all the objects tagged with the "all" tag
+		self.scale("all",0,0,wscale,hscale)
+	
 	def draw_grid(self, Grid):
 		self.w = len(Grid[0])
 		self.h = len(Grid)
-		self.pixels_height = int(self.size_in_pixels)/self.w
-		self.pixels_width = int(self.size_in_pixels)/self.w
-		#self.pixels_height = int(self.size_in_pixels)/self.h
-		#self.pixels_width = int(self.size_in_pixels)/self.w
+		self.pixels_height = int(self.height)/self.h
+		self.pixels_width = int(self.width)/self.w
 		for i in range(self.h):
 		    for j in range(self.w):
 		        if (Grid[i][j]==0):

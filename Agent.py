@@ -18,14 +18,21 @@ class Agent:
     self.Environment_=np.matrix.copy(grid)
     self.decision_=[False,False,False]
     self.Alive= True
+    self.Double_Jump=False
     
     
     
   def Jump(self):
+    if(self.Environment_[self.posY_+1,self.posX_]==1):
+      self.Double_Jump=True
+    
     if(self.decision_[0] and self.Environment_[self.posY_+1,self.posX_]==1 and self.Environment_[self.posY_-1,self.posX_]!=1):
       self.posY_=self.posY_-1
       return True
-      
+    if(self.decision_[0] and self.Double_Jump and self.Environment_[self.posY_-1,self.posX_]!=1): 
+      self.posY_=self.posY_-1
+      self.Double_Jump=False
+      return True
   def MvForward(self):
     if(self.decision_[1] and not(self.decision_[2]) and self.Environment_[self.posY_,self.posX_+1]!=1):
       self.posX_=self.posX_+1

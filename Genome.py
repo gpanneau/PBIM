@@ -124,5 +124,6 @@ if __name__ == '__main__':
   gm6.PutMap_Into_Txt("testgm6")
   gm9=Genome()
   gm9.SetMap_From_Txt("testgm6")
+
    
    

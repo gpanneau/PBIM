@@ -18,6 +18,7 @@ class Game:
     #Grid
     self.Grid=np.zeros((H,L),dtype=int)#The grid is a table full of zeros (H columns x L rows)
     self.Grid[H-2:H,:]=np.ones((2,L),dtype=int)#The grid has the 2 lines at the bottom full of ones (the floor)
+    self.Grid[0:2,:]=np.ones((2,L),dtype=int)#The grid has the 2 lines at the top full of ones (the ceil)
     self.Grid[:,0:2]=np.ones((H,2),dtype=int)#The grid has the 2 columns at the lest full of ones (the left wall)
     self.Grid[:,L-2:L]=np.ones((H,2),dtype=int)#The grid has the 2 columns at the right full of ones (the right wall)
     #Pop
@@ -40,14 +41,14 @@ class Game:
 
   def MakePit(self,x):
     """Create a gap at the column x. The last row is never changed."""
-    self.Grid[:,x]=np.zeros((len(self.Grid[:,x])),dtype=int)
+    self.Grid[2:,x]=np.zeros((len(self.Grid[2:,x])),dtype=int)
 
   def AddBlockStratum(self,xl,xr):
     """Create a new block Stratum. Preferentially don't use this method over a pit.
        xr>=0 and xl<L"""
     H=len(self.Grid)
     for col in range(xl,xr+1):
-      i=0
+      i=4
       while i<H and self.Grid[i][col]!=1:
         i+=1
       if i!=0 and i!=H:
@@ -55,16 +56,22 @@ class Game:
   def Random_Level_generation(self,nbPit,nblayer):
     for i in range(nbPit):
       x=int(np.random.random()*(len(self.Grid[0,:])-5)+2)
-      if self.Grid[len(self.Grid)-1,x-1]!=0 and self.Grid[len(self.Grid)-1,x+1]!=0:
+      if self.Grid[len(self.Grid)-1,x-1]!=0 or self.Grid[len(self.Grid)-1,x+1]!=0:
         self.MakePit(x)
     dicti={}
     for i in range(nblayer):
       xl=int(np.random.random()*(len(self.Grid[0,:])-5)+2)
-      xr=xl+int(np.random.random()*4)+1
-      if self.Grid[len(self.Grid)-1,xl]!=0 and self.Grid[len(self.Grid)-1,xl-1]!=0 and xr<len(self.Grid[0,:])-2 and xl not in dicti:
+      xr=xl+int(np.random.random()*8)+1
+      if self.Grid[len(self.Grid)-1,xl]!=0 and self.Grid[len(self.Grid)-1,xl-1]!=0 and xr<len(self.Grid[0,:])-2 and (xl not in dicti or dicti[xl]==1):
         self.AddBlockStratum(xl,xr)
-        dicti[xl]=xr
+        if xl in dicti:
+          dicti[xl]=2
+        if xl not in dicti:
+          dicti[xl]=1
+        
     return True
+  
+  
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
@@ -186,8 +193,8 @@ class Game:
   
 
 if __name__ == '__main__':  
-  w1=Game(L=30)
-  w1.Random_Level_generation(5,10)
+  w1=Game(L=60,H=18)
+  w1.Random_Level_generation(7,100)
   """w1.AddBlockStratum(5,12)
   w1.AddBlockStratum(7,15)
   w1.AddBlockStratum(18,21)

@@ -10,7 +10,7 @@ import numpy as np
 import Genome
 import math as mt
 class Agent:
-  def __init__(self,x,y,myGenome,grid):#Constructor whitch takes an existing genome, a grid  and a position wanted for the agent on this grid
+  def __init__(self,x,y,myGenome,grid):#Constructor which takes an existing genome, a grid and a position wanted for the agent on this grid
     self.posX_=x
     self.posY_=y
     self.Genome_= Genome.Genome(myGenome.I_,myGenome.O_)

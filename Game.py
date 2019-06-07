@@ -28,8 +28,7 @@ class Game:
     #World
     self.World=ViewWorld.CreateWorld()
     self.World.pack(padx=000,pady=000)
-    self.B = tk.Button(master=self.World.frame, text="step by step Bobby", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
-    self.ButtonContinue = tk.Button(master=self.World.frame, text="Roll Bobby, ROLL!!!!", bg='white', fg='red', width=25, height = 5, command=lambda:self.RunContinue()).pack(side=tk.RIGHT) #remplacer run par RunContinue quand la méthode marchera
+    self.B = tk.Button(master=self.World.frame, text="Run Bobby, RUUUN !", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
     
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
@@ -85,29 +84,6 @@ class Game:
     for Ag in self.Pop:
       if Ag.Alive:
         self.Grid[Ag.posY_,Ag.posX_]=0
-
-  def RunContinue(self):
-    for i in range(20):
-      self.RunContinueMethod()
-  
-  def RunContinueMethod(self): #Ce bouton ne marche pas encore, on ne sait pas pourquoi, mais il n'affiche Bobby qu'à la toute fin!!!
-    print("begin")
-    time.sleep(0.5)
-    self.Time+=1.5
-    for Ag in self.Pop:
-      if Ag.Alive:
-        self.Grid[Ag.posY_,Ag.posX_]=0
-        Ag.Make_Decision()
-        if(not(Ag.Jump())):
-          Ag.Fall()
-        Ag.MvForward()
-        Ag.MvBackward()
-        self.Grid[Ag.posY_,Ag.posX_]=2
-    self.World.draw_grid(self.Grid)
-    for Ag in self.Pop:
-      if Ag.Alive:
-        self.Grid[Ag.posY_,Ag.posX_]=0
-    print("end")
         
   def RunBlind(self): #run without printing anything
     self.Time+=1

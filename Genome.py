@@ -99,8 +99,8 @@ if __name__ == '__main__':
   gm4.Set_Map(np.array([[1, 2], [3, 4]]))
   print(gm4.Map_)
   print(gm3.Map_)
-  print(gm4.Processing(np.array([0,1]))==np.array([True,False,True,False]))
-  print(gm4.Processing(np.array([1,0]))==np.array([False,True,False,True]))
+  print(gm4.Processing(np.array([0,1]))==np.array([True,False]))
+  print(gm4.Processing(np.array([1,0]))==np.array([False,True]))
   
   print("5: Add_Gene test")
   gm5=Genome(2,4)
@@ -129,8 +129,9 @@ if __name__ == '__main__':
       
   print("9: PutMap_Into_Txt and test")
   gm6.PutMap_Into_Txt("testgm6")
+  print("done")
   gm9=Genome()
-  gm9.SetMap_From_Txt("testgm6")
+  gm9.SetMap_From_Txt("testgm6.txt")
 
    
    

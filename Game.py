@@ -242,20 +242,12 @@ if __name__ == '__main__':
   print(w1.EvolveByDivision(50,5)," seconde de calcule")
   w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
-  w1.PopTest()
-  i = 0
-  for agent in w1.Pop:
-    if agent.posX_==(len(w1.Grid[0,:])-3):
-      i+=1
-  print(100*i/len(w1.Pop),"""% d'efficacité""")
   w1.Pop=[]
   w1.AddAgent(A1)
   print(w1.Evolve(50,5)," seconde de calcule")
   w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.PopTest()
-  i = 0
+  w1.SortByFitness()
   for agent in w1.Pop:
-    if agent.posX_==(len(w1.Grid[0,:])-3):
-      i+=1
-  print(100*i/len(w1.Pop),"""% d'efficacité""")
+    print(agent.posX_)

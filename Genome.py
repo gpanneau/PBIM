@@ -44,25 +44,27 @@ class Genome:
     self.Hidden_=1*Out[self.O_:self.O_+self.H_]
     return Out[0:self.O_]
 
-  def Add_Gene(self):#This method adds a new gene, an intermediary hidden node between the input and the output. It improves the length of Hidden and H by one
+  def Add_Gene(self):#This methode add a new gene, an intermediary hiden node between the input and the output. It improve the lenght of Hiden and H by one
     self.H_+=1
     self.Hidden_=np.zeros((1,self.H_))
     M=np.zeros((self.I_+self.H_,self.O_+self.H_))
     M[0:self.I_+self.H_-1,0:self.O_+self.H_-1]=self.Map_
     self.Map_=M
     
+  def Remote_Last_Gene(self):#enlève le dernier gène, diminue la taille du génome de 1
+    if self.H_!=0:
+      self.H_=self.H_-1
+      self.Hidden_=np.zeros((1,self.H_))
+      M=np.zeros((self.I_+self.H_,self.O_+self.H_))
+      M=self.Map_[0:self.I_+self.H_,0:self.O_+self.H_]
+      self.Map_=M   
+    
   def Add_Genes(self, Number_Of_Genes):# add a selected number of genes
     for i in range(Number_Of_Genes):
       self.Add_Gene() 
       
-  def Remote_Last_Gene(self):#enlève le dernier gène, diminue la taille du génome de 1
-    if self.H_!=0:
-      self.H_=self.H_-1
-      self.Hiden_=np.zeros((1,self.H_))
-      M=np.zeros((self.I_+self.H_,self.O_+self.H_))
-      M=self.Map_[0:self.I_+self.H_,0:self.O_+self.H_]
       
-      self.Map_=M     
+  
   def Add_Connection(self,Source,Target,Value=1): # Add a connection of a chosen value in the chosen position in the Connections Matrix 
     self.Map_[Source,Target]=Value
     

@@ -102,7 +102,7 @@ class Game:
         G=Genome.Genome(25,3)
         G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
         A=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
-        A.Mutate(Mute,1)
+        A.Mutate(Mute,0.9)
         self.AddAgent(A)
     if Methode==1:
       j=0
@@ -115,7 +115,7 @@ class Game:
             G=Genome.Genome(25,3)
             G.Set_Map(agent.Genome_.Map_[:,:])
             A=Agent.Agent(agent.posX_,agent.posY_,G,self.Grid)
-            A.Mutate(Mute,1)
+            A.Mutate(Mute,0.9)
             PopBis.append(A)
             j+=1
         else:
@@ -160,7 +160,11 @@ class Game:
   def PopTest(self):
     while self.Time<4*self.lenth:
       self.RunBlind()
-    self.Time=0    
+    self.Time=0
+    for Ag in self.Pop: #élimination des individus tricheurs
+        for i in range(5):
+          if Ag.Alive:
+            Ag.Fall()    
 
     
 

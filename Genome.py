@@ -55,6 +55,14 @@ class Genome:
     for i in range(Number_Of_Genes):
       self.Add_Gene() 
       
+  def Remote_Last_Gene(self):#enlève le dernier gène, diminue la taille du génome de 1
+    if self.H_!=0:
+      self.H_=self.H_-1
+      self.Hiden_=np.zeros((1,self.H_))
+      M=np.zeros((self.I_+self.H_,self.O_+self.H_))
+      M=self.Map_[0:self.I_+self.H_,0:self.O_+self.H_]
+      
+      self.Map_=M     
   def Add_Connection(self,Source,Target,Value=1): # Add a connection of a chosen value in the chosen position in the Connections Matrix 
     self.Map_[Source,Target]=Value
     

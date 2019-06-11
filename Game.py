@@ -14,6 +14,8 @@ import tkinter as tk
 import time
 
 class Game:
+  
+  #CONSTRUCTEUR  
   def __init__(self,H=9,L=100):
     #Grid
     self.Grid=np.zeros((H,L),dtype=int)#The grid is a table full of zeros (H columns x L rows)
@@ -31,18 +33,16 @@ class Game:
     self.B = tk.Button(master=self.World.frame, text="Run Bobby, RUUUN !", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
     self.lenth=L
     self.hight=H
-    
-  def AddAgent(self,agent):
-    """Add an agent to the list Pop"""
-    self.Pop.append(agent)
 
-  def MakePit(self,x):
-    """Create a gap at the column x. The last row is never changed."""
+  #AFFICHAGE  
+  def printgridstep(self):  
+    self.World.draw_grid(self.Grid)
+    
+  #TERRAIN  
+  def MakePit(self,x): #Fait un trou à la position x
     self.Grid[2:,x]=np.zeros((len(self.Grid[2:,x])),dtype=int)
 
-  def AddBlockStratum(self,xl,xr):
-    """Create a new block Stratum. Preferentially don't use this method over a pit.
-       xr>=0 and xl<L"""
+  def AddBlockStratum(self,xl,xr): #Ajoute une strate de bloques entre xl et xr
     H=len(self.Grid)
     for col in range(xl,xr+1):
       i=4
@@ -69,6 +69,49 @@ class Game:
         
     return True
 
+  #POPULATION
+  def AddAgent(self,agent):#ajout d'un agent dans la population
+    self.Pop.append(agent)  
+    
+  def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
+    for agent in self.Pop:
+      if not agent.Alive:
+        agent.posX_=-1 #
+    i = len(self.Pop)-1 #si les agent sont mort on set leurs posx (fitness) à -1
+    while i!=0 : #algorithme de tri en fonction de posX_
+      for j in range(i):
+        if self.Pop[j].posX_<self.Pop[j+1].posX_:
+          inter=self.Pop[j]
+          self.Pop[j]=self.Pop[j+1]
+          self.Pop[j+1]=inter   
+      i=i-1
+  def New_Generation(self,Methode=0,Indiv=50,Mute=10):#crée une nouvelle génération d'individus à partir d'une ancienne population triée par fitness en fonction de la methode choisie
+    if Methode==0:
+      for i in range(1,Indiv):
+        G=Genome.Genome(25,3)
+        G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
+        self.Pop[i]=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
+        self.Pop[i].Mutate(Mute,1)
+    if Methode==1:
+      j=0
+      PopBis=[]
+      for agent in self.Pop:#chaque agent peut se reproduire dans la limite des places disponible. Les plus performent se reproduiront en premier
+        if j<Indiv:
+          PopBis.append(agent)
+          j+=1
+          if j<Indiv:
+            G=Genome.Genome(25,3)
+            G.Set_Map(agent.Genome_.Map_[:,:])
+            A=Agent.Agent(agent.posX_,agent.posY_,G,self.Grid)
+            A.Mutate(Mute,1)
+            PopBis.append(A)
+            j+=1
+        else:
+          break
+      self.Pop=PopBis
+
+
+#JEU
   def run(self):
     self.Time+=1
     for Ag in self.Pop:
@@ -97,47 +140,17 @@ class Game:
         Ag.MvForward()
         Ag.MvBackward()
         
-  def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
-    for agent in self.Pop:
-      if not agent.Alive:
-        agent.posX_=-1 #
-    i = len(self.Pop)-1 #si les agent sont mort on set leurs posx (fitness) à -1
-    while i!=0 : #algorithme de tri en fonction de posX_
-      for j in range(i):
-        if self.Pop[j].posX_<self.Pop[j+1].posX_:
-          inter=self.Pop[j]
-          self.Pop[j]=self.Pop[j+1]
-          self.Pop[j+1]=inter   
-      i=i-1
-    
-  def New_Generation(self,Methode=0,Indiv=50,Mute=10):#crée une nouvelle génération d'individus à partir d'une ancienne population triée par fitness en fonction de la methode choisie
-    if Methode==0:
-      for i in range(1,Indiv):
-        G=Genome.Genome(25,3)
-        G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
-        self.Pop[i]=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
-        self.Pop[i].Mutate(Mute,1)
-    if Methode==1:
-      j=0
-      PopBis=[]
-      for agent in self.Pop:#chaque agent peut se reproduire dans la limite des places disponible. Les plus performent se reproduiront en premier
-        if j<Indiv:
-          PopBis.append(agent)
-          j+=1
-          if j<Indiv:
-            G=Genome.Genome(25,3)
-            G.Set_Map(agent.Genome_.Map_[:,:])
-            A=Agent.Agent(agent.posX_,agent.posY_,G,self.Grid)
-            A.Mutate(Mute,1)
-            PopBis.append(A)
-            j+=1
-        else:
-          break
-      self.Pop=PopBis
-    
-  def printgridstep(self):  
-    self.World.draw_grid(self.Grid)
+  def PopTest(self):
+    bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
+    while self.Time<2*len(self.Grid[0,:]) and bestPosition[1]<(len(self.Grid[0,:])-3):
+      self.RunBlind()
+      self.Time+=1
+      bestPosition=self.FindBestAgent()
+    self.Time=0    
 
+    
+
+#EVOLUTION
   def FindBestAgent(self):
     best=0
     x=0
@@ -147,13 +160,7 @@ class Game:
         x=self.Pop[agent].posX_
     return [best,x]
   
-  def PopTest(self):
-    bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
-    while self.Time<2*len(self.Grid[0,:]) and bestPosition[1]<(len(self.Grid[0,:])-3):
-      self.RunBlind()
-      self.Time+=1
-      bestPosition=self.FindBestAgent()
-    self.Time=0
+
   def EvolveByDivision(self,IndivMax,MutationsRate,Generation=500):
     t=time.time()
     end=False;
@@ -173,6 +180,7 @@ class Game:
           j+=1
           if j<IndivMax:
             G=Genome.Genome(25,3)
+    """Add an agent to the list Pop"""
             G.Set_Map(agent.Genome_.Map_[:,:])
             A=Agent.Agent(4,2,G,self.Grid)
             A.Mutate(MutationsRate,1)

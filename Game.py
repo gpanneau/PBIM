@@ -68,7 +68,15 @@ class Game:
           dicti[xl]=1
         
     return True
-
+  
+  
+  def File_to_map(self,s):#Charge un terrain depuis un fichier texte
+    self.Grid=np.loadtxt(s)
+    self.lenth=len(self.Grid[0,:])
+    self.hight=len(self.Grid[:,0])
+    for agent in self.Pop:
+      agent.Environment_=self.Grid
+      
   #POPULATION
   def AddAgent(self,agent):#ajout d'un agent dans la population
     self.Pop.append(agent)  

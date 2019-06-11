@@ -130,7 +130,7 @@ if __name__ == '__main__':
   print("9: PutMap_Into_Txt and test")
   gm6.PutMap_Into_Txt("testgm6")
   print("done")
-  gm9=Genome()
+  gm9=Genome(2,4)
   gm9.SetMap_From_Txt("testgm6.txt")
 
    

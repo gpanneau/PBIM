@@ -10,14 +10,16 @@ import Agent
 import Genome
 import Game
 
-
 w=Game.Game()
 G0=Genome.Genome(25,3)
 A0=Agent.Agent(4,2,G0,w.Grid)
 w.AddAgent(A0)
-w.File_to_map("Complex.txt")
+filname="Simple"
+w.File_to_map(filname+".txt")
 
-print(w.Evolution(Methode=1,Indiv=20,Mute=200,timeMax=200))
+t=w.Evolution(Methode=1,Indiv=20,Mute=200,timeMax=200)
+print(t)
+w.Pop[0].Genome_.PutMap_Into_Txt(str("Best_Genome_on_Map_'"+filname+"'_in_"+str(t)+"_s"))
 w.Start()
 w.printgridstep()
 input("pause")

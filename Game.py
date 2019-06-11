@@ -149,11 +149,9 @@ class Game:
         Ag.MvBackward()
         
   def PopTest(self):
-    bestPosition=[0,0]# a list containing the position of the best agent(aka the one which as gone the further) in pop and his posX atribute
-    while self.Time<2*len(self.Grid[0,:]) and bestPosition[1]<(len(self.Grid[0,:])-3):
+    while self.Time<1.5*self.lenth:
       self.RunBlind()
       self.Time+=1
-      bestPosition=self.FindBestAgent()
     self.Time=0    
 
     

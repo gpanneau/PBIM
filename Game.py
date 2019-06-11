@@ -158,7 +158,7 @@ class Game:
         Ag.MvBackward()
         
   def PopTest(self):
-    while self.Time<4*self.lenth:
+    while self.Time<2*self.lenth:
       self.RunBlind()
     self.Time=0
     for Ag in self.Pop: #élimination des individus tricheurs

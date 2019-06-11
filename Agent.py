@@ -58,8 +58,11 @@ class Agent:
     for i in range(nb_mut):
       if np.random.random()<add_conect_prob: #construit une conexion avec une probabilité égale à add_conect_prob
         self.Genome_.Add_Random_Connection(int(mt.floor( np.random.random()*2.5-0.5))) #Crée une connexion à une position aléatoire d'une valeur de 1, 0 ou -1 (1/3 de chance pour chaque)
-      else: # sinon ajoute une nouveau gène.
-        self.Genome_.Add_Genes(1)
+      else: # sinon ajoute ou on suprime une gène .
+        if np.random.random()>0.5:
+          self.Genome_.Add_Gene()
+        else:
+          self.Genome_.Remote_Last_Gene()
   
   
     

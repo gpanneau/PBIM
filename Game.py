@@ -95,11 +95,15 @@ class Game:
       i=i-1
   def New_Generation(self,Methode=0,Indiv=50,Mute=10):#crée une nouvelle génération d'individus à partir d'une ancienne population triée par fitness en fonction de la methode choisie
     if Methode==0:
+      Father=self.Pop[0]
+      self.Pop=[]
+      self.AddAgent(Father)
       for i in range(1,Indiv):
         G=Genome.Genome(25,3)
         G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
-        self.Pop[i]=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
-        self.Pop[i].Mutate(Mute,1)
+        A=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
+        A.Mutate(Mute,1)
+        self.AddAgent(A)
     if Methode==1:
       j=0
       PopBis=[]
@@ -117,7 +121,12 @@ class Game:
         else:
           break
       self.Pop=PopBis
-
+    
+  def Start(self):
+    for agent in self.Pop:
+      agent.Alive=True
+      agent.posX_=2
+      agent.posY_=self.hight-5
 
 #JEU
   def run(self):
@@ -149,9 +158,8 @@ class Game:
         Ag.MvBackward()
         
   def PopTest(self):
-    while self.Time<1.5*self.lenth:
+    while self.Time<4*self.lenth:
       self.RunBlind()
-      self.Time+=1
     self.Time=0    
 
     
@@ -186,7 +194,7 @@ class Game:
           j+=1
           if j<IndivMax:
             G=Genome.Genome(25,3)
-    """Add an agent to the list Pop"""
+            """Add an agent to the list Pop"""
             G.Set_Map(agent.Genome_.Map_[:,:])
             A=Agent.Agent(4,2,G,self.Grid)
             A.Mutate(MutationsRate,1)
@@ -216,7 +224,19 @@ class Game:
       if end:
         return time.time()-t
     return time.time()-t
-  
+
+  def Evolution(self,Methode=0,Indiv=50,Mute=10,timeMax=10):#méthode d'évolution généralisée
+    t=time.time()
+    Finished=False
+    while time.time()-t<timeMax and not Finished:
+      self.Start()
+      self.PopTest()
+      self.SortByFitness()
+      if self.Pop[0].posX_ == self.lenth-3:
+        Finished=True
+      else:
+        self.New_Generation(Methode,Indiv,Mute)
+    return time.time()-t
 
 if __name__ == '__main__':  
   w1=Game(L=60,H=18)
@@ -278,13 +298,8 @@ if __name__ == '__main__':
   Galea=Genome.Genome(25,3)
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   w1.AddAgent(A1)
-  print(w1.EvolveByDivision(5,5)," seconde de calcule")
-  w1.printgridstep()
-  input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
-  w1.Pop=[]
-  w1.AddAgent(A1)
-  print(w1.Evolve(5,5)," seconde de calcule")
-  w1.printgridstep()
+  print(w1.Evolution()," seconde de calcule")
+  w1.Start()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   for i in range(5):
     w1.Pop[i].posX_=i

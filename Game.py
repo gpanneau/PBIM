@@ -80,6 +80,7 @@ class Game:
   #POPULATION
   def AddAgent(self,agent):#ajout d'un agent dans la population
     self.Pop.append(agent)  
+    agent.Environment_=self.Grid
     
   def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
     for agent in self.Pop:
@@ -158,7 +159,7 @@ class Game:
         Ag.MvBackward()
         
   def PopTest(self):
-    while self.Time<2*self.lenth:
+    while self.Time<1.2*self.lenth:
       self.RunBlind()
     self.Time=0
     for Ag in self.Pop: #élimination des individus tricheurs
@@ -232,6 +233,7 @@ class Game:
   def Evolution(self,Methode=0,Indiv=50,Mute=10,timeMax=10):#méthode d'évolution généralisée
     t=time.time()
     Finished=False
+    generation=0
     while time.time()-t<timeMax and not Finished:
       self.Start()
       self.PopTest()
@@ -240,7 +242,8 @@ class Game:
         Finished=True
       else:
         self.New_Generation(Methode,Indiv,Mute)
-    return time.time()-t
+        generation+=1
+    return (time.time()-t,generation)
 
 if __name__ == '__main__':  
   w1=Game(L=60,H=18)

@@ -29,6 +29,8 @@ class Game:
     self.World=ViewWorld.CreateWorld()
     self.World.pack(padx=000,pady=000)
     self.B = tk.Button(master=self.World.frame, text="Run Bobby, RUUUN !", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+    self.lenth=L
+    self.hight=H
     
   def AddAgent(self,agent):
     """Add an agent to the list Pop"""
@@ -108,7 +110,7 @@ class Game:
           self.Pop[j+1]=inter   
       i=i-1
     
-  def New_Generation(self,Methode=0,Indiv=50,Mute=10):
+  def New_Generation(self,Methode=0,Indiv=50,Mute=10):#crée une nouvelle génération d'individus à partir d'une ancienne population triée par fitness en fonction de la methode choisie
     if Methode==0:
       for i in range(1,Indiv):
         G=Genome.Genome(25,3)

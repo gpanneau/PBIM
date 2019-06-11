@@ -128,6 +128,8 @@ class Game:
       agent.Alive=True
       agent.posX_=2
       agent.posY_=self.hight-5
+      if agent.Genome_.H_!=0:
+        agent.Genome_.Hidden_=np.zeros((1,agent.Genome_.H_))
 
 #JEU
   def run(self):

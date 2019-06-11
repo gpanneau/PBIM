@@ -24,6 +24,7 @@ t_final=60
 mutation=200
 mutvar=100
 ident=0
+Serie=0
 while time.time()-t_init<t_final:
   
   for filename in filenames:
@@ -34,7 +35,10 @@ while time.time()-t_init<t_final:
     A=w.Pop[0]
     if E[1]==0:
       w.Pop[0].Genome_.PutMap_Into_Txt(str("Bobbies/Best_Genome_id"+str(ident)+"_on_Map_'"+filename+"'_in_"+str(int(E[0]*1000))+"_ms"))
-    print(E,filename,mutation)
+      Serie+=1
+    else:
+      Serie=0
+    print(E,Serie,filename,mutation,w.Pop[0].posX_)
     mutation=int(E[0]+mutvar+2)
     ident+=1
   mutvar=mutvar*0.8

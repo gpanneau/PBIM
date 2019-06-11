@@ -105,11 +105,34 @@ class Game:
         if self.Pop[j].posX_<self.Pop[j+1].posX_:
           inter=self.Pop[j]
           self.Pop[j]=self.Pop[j+1]
-          self.Pop[j+1]=inter
-          
+          self.Pop[j+1]=inter   
       i=i-1
     
-
+  def New_Generation(self,Methode=0,Indiv=50,Mute=10):
+    if Methode==0:
+      for i in range(1,Indiv):
+        G=Genome.Genome(25,3)
+        G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
+        self.Pop[i]=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
+        self.Pop[i].Mutate(Mute,1)
+    if Methode==1:
+      j=0
+      PopBis=[]
+      for agent in self.Pop:#chaque agent peut se reproduire dans la limite des places disponible. Les plus performent se reproduiront en premier
+        if j<Indiv:
+          PopBis.append(agent)
+          j+=1
+          if j<Indiv:
+            G=Genome.Genome(25,3)
+            G.Set_Map(agent.Genome_.Map_[:,:])
+            A=Agent.Agent(agent.posX_,agent.posY_,G,self.Grid)
+            A.Mutate(Mute,1)
+            PopBis.append(A)
+            j+=1
+        else:
+          break
+      self.Pop=PopBis
+    
   def printgridstep(self):  
     self.World.draw_grid(self.Grid)
 
@@ -239,15 +262,24 @@ if __name__ == '__main__':
   Galea=Genome.Genome(25,3)
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   w1.AddAgent(A1)
-  print(w1.EvolveByDivision(50,5)," seconde de calcule")
+  print(w1.EvolveByDivision(5,5)," seconde de calcule")
   w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
   w1.Pop=[]
   w1.AddAgent(A1)
-  print(w1.Evolve(50,5)," seconde de calcule")
+  print(w1.Evolve(5,5)," seconde de calcule")
   w1.printgridstep()
   input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
-  w1.PopTest()
+  for i in range(5):
+    w1.Pop[i].posX_=i
   w1.SortByFitness()
+  for agent in w1.Pop:
+    print(agent.posX_)
+  input('pause') 
+  w1.New_Generation(1,5,5)
+  for agent in w1.Pop:
+    print(agent.posX_)  
+  input('pause')
+  w1.New_Generation(0,5,5)
   for agent in w1.Pop:
     print(agent.posX_)

@@ -70,7 +70,7 @@ class Genome:
     self.Add_Connection(int(np.random.random()*(self.H_+self.I_)),int(np.random.random()*(self.H_+self.O_)),Value) # Add a connection of a chosen value in a random position in the Connections Matrix 
    
   def SetMap_From_Txt(self,namefile):#retrieves a matrix in a txt file and atrributes it to the Map_ attribute of the current Genom object
-   self.Set_Map(np.loadtxt("Bobby"))
+   self.Set_Map(np.loadtxt(namefile))
     
   def PutMap_Into_Txt(self, namefile):#retrieves the Map_ of the current Genom object and writes it into a file txt
    namefile=namefile+".txt"

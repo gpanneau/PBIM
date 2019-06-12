@@ -11,7 +11,7 @@ import Genome
 import Game
 import time
 import math
-filenames=["Avancer","Sauter","Grimper","Tunel","Reculer","GrandSaut","Sauter2","Grimper2","Reculer2","Tunel2"]
+filenames=["Avancer","Sauter","Sauter2","Grimper","Tunel","Tunel2","GrandSaut","Grimper2"]
 
 Dict={}
 DictM={}
@@ -35,7 +35,7 @@ while time.time()-t_init<t_final and Serie<100:
   for filename in filenames:
     w=Dict[filename]
     w.AddAgent(A)
-    E=w.Evolution(Methode=0,Indiv=int(20*math.pow(DictM[filename],0.5)),Mute=DictM[filename],timeMax=DictM[filename]/50)
+    E=w.Evolution(Methode=0,Indiv=200,Mute=DictM[filename],timeMax=10)
     w.SortByFitness()
     A=w.Pop[0]
     if E[1]==0 :

@@ -101,7 +101,7 @@ class Game:
       Father=self.Pop[0]
       self.Pop=[]
       self.AddAgent(Father)
-      for i in range(1,Indiv):
+      for i in range(0,Indiv):
         G=Genome.Genome(25,3)
         G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
         A=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)

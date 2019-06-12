@@ -29,10 +29,13 @@ class Agent:
     if(self.decision_[0] and self.Environment_[self.posY_+1,self.posX_]==1 and self.Environment_[self.posY_-1,self.posX_]!=1):
       self.posY_=self.posY_-1
       return True
-    if(self.decision_[0] and self.Double_Jump and self.Environment_[self.posY_-1,self.posX_]!=1): 
+    if(self.decision_[0] and self.Double_Jump and self.Environment_[self.posY_-1,self.posX_]!=1): #saute une deuxième fois
       self.posY_=self.posY_-1
       self.Double_Jump=False
       return True
+    elif self.decision_[0] and self.Double_Jump: #ne saute pas mais ne tombe pas, consomme de dauble saut
+      self.Double_Jump=False
+      return True      
   def MvForward(self):
     if(self.decision_[1] and not(self.decision_[2]) and self.Environment_[self.posY_,self.posX_+1]!=1):
       self.posX_=self.posX_+1

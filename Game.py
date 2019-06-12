@@ -28,14 +28,16 @@ class Game:
     #Time
     self.Time=0#Time is counting how many time the agents have been run.
     #World
-    self.World=ViewWorld.CreateWorld()
-    self.World.pack(padx=000,pady=000)
-    self.B = tk.Button(master=self.World.frame, text="Run Bobby, RUUUN !", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
     self.lenth=L
     self.hight=H
 
   #AFFICHAGE  
-  def printgridstep(self):  
+  def initdraw(self):
+    self.World=ViewWorld.CreateWorld()
+    self.World.pack(padx=000,pady=000)
+    self.B = tk.Button(master=self.World.frame, text="Run Bobby, RUUUN !", bg='yellow', fg='red', width=25, height = 5, command=lambda:self.run()).pack(side=tk.LEFT)
+  def printgridstep(self):
+    self.initdraw()
     self.World.draw_grid(self.Grid)
     
   #TERRAIN  
@@ -161,7 +163,7 @@ class Game:
         Ag.MvBackward()
         
   def PopTest(self):
-    while self.Time<1.2*self.lenth:
+    while self.Time<2*self.lenth:
       self.RunBlind()
     self.Time=0
     for Ag in self.Pop: #élimination des individus tricheurs

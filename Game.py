@@ -87,11 +87,11 @@ class Game:
   def SortByFitness(self): #tri la popuolation des individus avec la meilleur fitnesse à ceux avec la pire
     for agent in self.Pop:
       if not agent.Alive:
-        agent.posX_=-1 #
+        agent.posX_=-100 #
     i = len(self.Pop)-1 #si les agent sont mort on set leurs posx (fitness) à -1
     while i!=0 : #algorithme de tri en fonction de posX_
       for j in range(i):
-        if self.Pop[j].posX_<self.Pop[j+1].posX_:
+        if self.Pop[j].posX_-1*self.Pop[j].posY_<self.Pop[j+1].posX_-1*self.Pop[j+1].posY_:
           inter=self.Pop[j]
           self.Pop[j]=self.Pop[j+1]
           self.Pop[j+1]=inter   
@@ -105,7 +105,7 @@ class Game:
         G=Genome.Genome(25,3)
         G.Set_Map(self.Pop[0].Genome_.Map_[:,:])
         A=Agent.Agent(self.Pop[0].posX_,self.Pop[0].posY_,G,self.Grid)
-        A.Mutate(Mute,0.99)
+        A.Mutate(Mute,0.95)
         self.AddAgent(A)
     if Methode==1:
       j=0
@@ -118,7 +118,7 @@ class Game:
             G=Genome.Genome(25,3)
             G.Set_Map(agent.Genome_.Map_[:,:])
             A=Agent.Agent(agent.posX_,agent.posY_,G,self.Grid)
-            A.Mutate(Mute,0.99)
+            A.Mutate(Mute,0.95)
             PopBis.append(A)
             j+=1
         else:
@@ -126,6 +126,7 @@ class Game:
       self.Pop=PopBis
     
   def Start(self):
+    self.Time=0
     for agent in self.Pop:
       agent.Alive=True
       agent.posX_=2
@@ -134,25 +135,25 @@ class Game:
         agent.Genome_.Hidden_=np.zeros((1,agent.Genome_.H_))
 
 #JEU
-  def run(self):
-    self.Time+=1
-    for Ag in self.Pop:
-      if Ag.Alive:
-        self.Grid[Ag.posY_,Ag.posX_]=0
-        Ag.Make_Decision()
-        if(not(Ag.Jump())):
-          Ag.Fall()
-        Ag.MvForward()
-        Ag.MvBackward()
-    for Ag in self.Pop:
-      if Ag.Alive:
-        self.Grid[Ag.posY_,Ag.posX_]=2
-    self.World.draw_grid(self.Grid)
-    for Ag in self.Pop:
-      if Ag.Alive:
-        self.Grid[Ag.posY_,Ag.posX_]=0
+  def run(self):#fait bouger l'ensemble des individus une fois et les affiches
+      self.Time+=1
+      for Ag in self.Pop:
+        if Ag.Alive:
+          self.Grid[Ag.posY_,Ag.posX_]=0
+          Ag.Make_Decision()
+          if(not(Ag.Jump())):
+            Ag.Fall()
+          Ag.MvForward()
+          Ag.MvBackward()
+      for Ag in self.Pop:
+        if Ag.Alive:
+          self.Grid[Ag.posY_,Ag.posX_]=2
+      self.World.draw_grid(self.Grid)
+      for Ag in self.Pop:
+        if Ag.Alive:
+          self.Grid[Ag.posY_,Ag.posX_]=0
         
-  def RunBlind(self): #run without printing anything
+  def RunBlind(self): #run sans affichage
     self.Time+=1
     for Ag in self.Pop:
       if Ag.Alive:
@@ -250,78 +251,15 @@ class Game:
     return (time.time()-t,generation)
 
 if __name__ == '__main__':  
-  w1=Game(L=60,H=18)
-  w1.Random_Level_generation(7,100)
-  """w1.AddBlockStratum(5,12)
-  w1.AddBlockStratum(7,15)
-  w1.AddBlockStratum(18,21)
-  w1.MakePit(9)
-  w1.MakePit(11)
-  w1.MakePit(15)
-  w1.MakePit(20)
-  Gsucces=Genome.Genome(25,3)
-  Gsucces.Set_Map(np.loadtxt("Bobby"))
-  A2=Agent.Agent(4,2,Gsucces,w1.Grid)
-  w1.AddAgent(A2)
-  for i in range(5):
-    Galea=Genome.Genome(25,3)
-    A1=Agent.Agent(4,2,Gsucces,w1.Grid)
-    A1.Mutate(100,0.95)
-    w1.AddAgent(A1)"""
-  #w1.printgridstep()
-  #input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
-
-  """ g1=Game(8,30)
-  print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  g2=Game(3,2)
-  print(g2.Grid==[[1,1],[1,1],[1,1]])
-  print(g1.Pop==g2.Pop==[])
-  agent=Agent.Agent(2,2,Genome.Genome(10,4),g1.Grid)
-  g1.AddAgent(agent)
-  print(g1.Pop==[agent])
-  print(g1.Time==g2.Time==0)
-  g1.step()
-  g2.step()
-  print(g1.Time==g2.Time==1)
-  g1.MakePit(10)
-  print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  g1.MakePit(29)
-  print(g1.Grid==[[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  g1.MakePit(0)
-  print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  g1.AddBlockStratum(0,29)
-  print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  g1.AddBlockStratum(5,12)
-  print(g1.Grid==[[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,0,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
-  """
-
-  
-  """#test findbest agent
-  w1.AddAgent(agent)
-  print(agent.posX_)
-  print(agent)
-  print(A2.posX_)
-  print(A2)
-  best=w1.FindBestAgent()
-  print(best.posX_)
-  print(best)"""
+  w1=Game(L=100,H=40)
+  w1.Random_Level_generation(30,400)
   Galea=Genome.Genome(25,3)
+  
   A1=Agent.Agent(4,2,Galea,w1.Grid)
   w1.AddAgent(A1)
-  print(w1.Evolution()," seconde de calcule")
-  w1.Start()
-  input('it works!') #Je sais pas pourquoi mais ça marche pas si cette ligne là est absente...
-  for i in range(5):
-    w1.Pop[i].posX_=i
-  w1.SortByFitness()
-  for agent in w1.Pop:
-    print(agent.posX_)
-  input('pause') 
-  w1.New_Generation(1,5,5)
-  for agent in w1.Pop:
-    print(agent.posX_)  
-  input('pause')
-  w1.New_Generation(0,5,5)
-  for agent in w1.Pop:
-    print(agent.posX_)
+  for i in range(2,61):
+    w1.Pop[0].Genome_.SetMap_From_Txt("Bobbies/Bobby"+str(i)+".txt")
+    w1.Start()
+    w1.PopTest()
+    if (w1.Pop[0].posX_==w1.lenth-3):
+      print("Bobby"+str(i)+".txt is successfull")

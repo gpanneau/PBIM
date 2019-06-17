@@ -11,8 +11,8 @@ import Genome
 import Game
 import time
 import math
-filenames=["Avancer","Sauter","Sauter2","Grimper","Tunel","Tunel2","GrandSaut","Grimper2"]
-
+filenames=["Avancer","Reculer","Reculer2","Sauter","Sauter2","Grimper","Tunel","Tunel2","GrandSaut","Grimper2"]
+filenames2=["Avancer"]
 Dict={}
 DictM={}
 for filename in filenames:
@@ -21,6 +21,7 @@ for filename in filenames:
   Dict[filename]=w
   DictM[filename]=200
 G=Genome.Genome(25,3)
+G.PutMap_Into_Txt("Bobbies/Bobby0")
 A=Agent.Agent(4,2,G,Dict["Avancer"].Grid)
 
 t_init=time.time()
@@ -30,22 +31,27 @@ mutation=200
 mutvar=100
 ident=0
 Serie=0
-while time.time()-t_init<t_final and Serie<100:
+i=0
+end=False
+while time.time()-t_init<t_final and i<10:
   
-  for filename in filenames:
+  for filename in filenames2:
     w=Dict[filename]
     w.AddAgent(A)
-    E=w.Evolution(Methode=0,Indiv=200,Mute=DictM[filename],timeMax=10)
+    E=w.Evolution(Methode=0,Indiv=100,Mute=20,timeMax=10)
     w.SortByFitness()
     A=w.Pop[0]
     if E[1]==0 :
       Serie+=1
-      if Serie==100:
-        w.Pop[0].Genome_.PutMap_Into_Txt(str("Bobbies/id"+str(ident)+"_tests_simples_took_"+str(int(time.time()-t_init))+"s"))
+      if Serie==(i+1):
+        w.Pop[0].Genome_.PutMap_Into_Txt("Bobbies/Bobby"+str(80+i))
+        i=(i+1)
+        filenames2.append(filenames[i%10])
+        Serie=0
       
     else:
       Serie=0
-    print(E,Serie,filename,DictM[filename],w.Pop[0].posX_)
+    print(i,E,Serie,filename,DictM[filename],w.Pop[0].posX_)
     w.Pop=[]
     DictM[filename]=int(E[0]*30+5)
     ident+=1
